@@ -1,0 +1,36 @@
+[package]
+name = "rquest-util"
+description = "Common utilities used with rquest"
+repository = "https://github.com/0x676e67/rquest-util"
+documentation = "https://docs.rs/rquest-util"
+authors = ["0x676e67 <gngppz@gmail.com>"]
+version = "0.1.0"
+readme = "README.md"
+license = "MIT"
+edition = "2021"
+rust-version = "1.80"
+
+[features]
+default = ["impersonate"]
+impersonate = ["dep:http", "dep:serde", "dep:typed-builder"]
+impersonate-gzip = ["rquest/gzip"]
+impersonate-brotli = ["rquest/brotli"]
+impersonate-deflate = ["rquest/deflate"]
+impersonate-zstd = ["rquest/zstd"]
+
+[dependencies]
+http = { version = "1", optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
+typed-builder = { version = "0.20.0", optional = true }
+rquest = { git = "https://github.com/0x676e67/rquest", default-features = false }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+
+[lib]
+doctest = false
+
+[[example]]
+name = "impersonate"
+path = "examples/impersonate.rs"
+required-features = ["impersonate", "impersonate-gzip", "impersonate-brotli", "impersonate-deflate", "impersonate-zstd"]
