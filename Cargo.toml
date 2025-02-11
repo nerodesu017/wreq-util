@@ -13,10 +13,10 @@ rust-version = "1.80"
 [features]
 default = ["impersonate"]
 impersonate = ["dep:http", "dep:serde", "dep:typed-builder"]
-impersonate-gzip = ["rquest/gzip"]
-impersonate-brotli = ["rquest/brotli"]
-impersonate-deflate = ["rquest/deflate"]
-impersonate-zstd = ["rquest/zstd"]
+impersonate-gzip = []
+impersonate-brotli = []
+impersonate-deflate = []
+impersonate-zstd = []
 
 [dependencies]
 http = { version = "1", optional = true }
@@ -33,4 +33,4 @@ doctest = false
 [[example]]
 name = "impersonate"
 path = "examples/impersonate.rs"
-required-features = ["impersonate", "impersonate-gzip", "impersonate-brotli", "impersonate-deflate", "impersonate-zstd"]
+required-features = ["impersonate", "impersonate-gzip", "impersonate-brotli", "impersonate-deflate", "impersonate-zstd", "rquest/full"]
