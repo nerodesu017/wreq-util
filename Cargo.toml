@@ -11,12 +11,12 @@ edition = "2021"
 rust-version = "1.80"
 
 [features]
-default = ["impersonate"]
-impersonate = ["dep:http", "dep:serde", "dep:typed-builder"]
-impersonate-gzip = []
-impersonate-brotli = []
-impersonate-deflate = []
-impersonate-zstd = []
+default = ["emulation", "gzip", "brotli", "deflate", "zstd"]
+emulation = ["dep:http", "dep:serde", "dep:typed-builder"]
+gzip = ["rquest/gzip"]
+brotli = ["rquest/brotli"]
+deflate = ["rquest/deflate"]
+zstd = ["rquest/zstd"]
 
 [dependencies]
 http = { version = "1", optional = true }
@@ -31,6 +31,6 @@ tokio = { version = "1", features = ["full"] }
 doctest = false
 
 [[example]]
-name = "impersonate"
-path = "examples/impersonate.rs"
-required-features = ["impersonate", "impersonate-gzip", "impersonate-brotli", "impersonate-deflate", "impersonate-zstd", "rquest/full"]
+name = "emulation"
+path = "examples/emulation.rs"
+required-features = ["emulation", "gzip", "brotli", "deflate", "zstd", "rquest/full"]

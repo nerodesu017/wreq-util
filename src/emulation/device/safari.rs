@@ -1,4 +1,4 @@
-use super::impersonate_imports::*;
+use super::emulation_imports::*;
 use http2::*;
 use tls::*;
 
@@ -8,8 +8,8 @@ macro_rules! mod_generator {
             use super::*;
 
             #[inline(always)]
-            pub fn http_context(option: ImpersonateOption) -> HttpContext {
-                HttpContext::builder()
+            pub fn emulation(option: EmulationOption) -> EmulationProvider {
+                EmulationProvider::builder()
                     .tls_config($tls_config)
                     .http2_config(conditional_http2!(option.skip_http2, $http2_config))
                     .default_headers(conditional_headers!(
@@ -101,11 +101,7 @@ fn header_initializer_for_16_17(ua: &'static str) -> HeaderMap {
         HeaderValue::from_static("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"),
     );
     headers.insert("sec-fetch-site", HeaderValue::from_static("none"));
-    #[cfg(all(
-        feature = "impersonate-gzip",
-        feature = "impersonate-deflate",
-        feature = "impersonate-brotli"
-    ))]
+    #[cfg(all(feature = "gzip", feature = "deflate", feature = "brotli"))]
     headers.insert(
         ACCEPT_ENCODING,
         HeaderValue::from_static("gzip, deflate, br"),
@@ -126,11 +122,7 @@ fn header_initializer_for_15(ua: &'static str) -> HeaderMap {
         HeaderValue::from_static("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"),
     );
     headers.insert(ACCEPT_LANGUAGE, HeaderValue::from_static("en-US,en;q=0.9"));
-    #[cfg(all(
-        feature = "impersonate-gzip",
-        feature = "impersonate-deflate",
-        feature = "impersonate-brotli"
-    ))]
+    #[cfg(all(feature = "gzip", feature = "deflate", feature = "brotli"))]
     headers.insert(
         ACCEPT_ENCODING,
         HeaderValue::from_static("gzip, deflate, br"),
@@ -151,11 +143,7 @@ fn header_initializer_for_18(ua: &'static str) -> HeaderMap {
     headers.insert("sec-fetch-mode", HeaderValue::from_static("navigate"));
     headers.insert(ACCEPT_LANGUAGE, HeaderValue::from_static("en-US,en;q=0.9"));
     headers.insert("priority", HeaderValue::from_static("u=0, i"));
-    #[cfg(all(
-        feature = "impersonate-gzip",
-        feature = "impersonate-deflate",
-        feature = "impersonate-brotli"
-    ))]
+    #[cfg(all(feature = "gzip", feature = "deflate", feature = "brotli"))]
     headers.insert(
         ACCEPT_ENCODING,
         HeaderValue::from_static("gzip, deflate, br"),
@@ -164,7 +152,7 @@ fn header_initializer_for_18(ua: &'static str) -> HeaderMap {
 }
 
 mod tls {
-    use crate::imp::tls_imports::*;
+    use super::super::tls_imports::*;
 
     pub const CURVES: &[SslCurve] = &[
         SslCurve::X25519,
@@ -288,7 +276,7 @@ mod tls {
 }
 
 mod http2 {
-    use crate::imp::http2_imports::*;
+    use super::super::http2_imports::*;
 
     pub const HEADER_PRIORITY: (u32, u8, bool) = (0, 255, true);
     pub const NEW_HEADER_PRIORITY: (u32, u8, bool) = (0, 255, false);

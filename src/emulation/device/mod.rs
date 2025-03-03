@@ -1,4 +1,4 @@
-//! Impersonate http_context for different browsers.
+//! Emulation for different browsers.
 #![allow(missing_debug_implementations)]
 #![allow(missing_docs)]
 
@@ -9,7 +9,7 @@ mod firefox;
 mod okhttp;
 mod safari;
 
-use rquest::{HttpContext, HttpContextProvider};
+use rquest::{EmulationProvider, EmulationProviderFactory};
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 
@@ -18,19 +18,15 @@ use firefox::*;
 use okhttp::*;
 use safari::*;
 
-mod impersonate_imports {
-    pub use super::{ImpersonateOS, ImpersonateOption};
+mod emulation_imports {
+    pub use super::{EmulationOS, EmulationOption};
     pub use http::{
         header::{ACCEPT, ACCEPT_LANGUAGE, UPGRADE_INSECURE_REQUESTS, USER_AGENT},
         HeaderMap, HeaderName, HeaderValue,
     };
-    pub use rquest::{Http2Config, HttpContext};
+    pub use rquest::{EmulationProvider, Http2Config};
 
-    #[cfg(all(
-        feature = "impersonate-gzip",
-        feature = "impersonate-deflate",
-        feature = "impersonate-brotli"
-    ))]
+    #[cfg(all(feature = "gzip", feature = "deflate", feature = "brotli"))]
     pub use http::header::ACCEPT_ENCODING;
 }
 
@@ -51,8 +47,8 @@ mod http2_imports {
 
 /// Represents different browser versions for impersonation.
 ///
-/// The `Impersonate` enum provides variants for different browser versions that can be used
-/// to impersonate HTTP requests. Each variant corresponds to a specific browser version.
+/// The `Emulation` enum provides variants for different browser versions that can be used
+/// to emulation HTTP requests. Each variant corresponds to a specific browser version.
 ///
 /// # Naming Convention
 ///
@@ -67,17 +63,17 @@ mod http2_imports {
 /// # Examples
 ///
 /// ```rust
-/// use rquest::Impersonate;
+/// use rquest_util::Emulation;
 ///
-/// let impersonate = Impersonate::Chrome100;
-/// let serialized = serde_json::to_string(&impersonate).unwrap();
+/// let emulation = Emulation::Chrome100;
+/// let serialized = serde_json::to_string(&emulation).unwrap();
 /// assert_eq!(serialized, "\"chrome_100\"");
 ///
-/// let deserialized: Impersonate = serde_json::from_str(&serialized).unwrap();
-/// assert_eq!(deserialized, Impersonate::Chrome100);
+/// let deserialized: Emulation = serde_json::from_str(&serialized).unwrap();
+/// assert_eq!(deserialized, Emulation::Chrome100);
 /// ```
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize, Serialize)]
-pub enum Impersonate {
+pub enum Emulation {
     #[serde(rename = "chrome_100")]
     Chrome100,
     #[serde(rename = "chrome_101")]
@@ -193,22 +189,28 @@ pub enum Impersonate {
     Firefox128,
     #[serde(rename = "firefox_133")]
     Firefox133,
+    #[serde(rename = "firefox_135")]
+    Firefox135,
+    #[serde(rename = "firefox_private_135")]
+    FirefoxPrivate135,
+    #[serde(rename = "firefox_android_135")]
+    FirefoxAndroid135,
 }
 
-/// ======== Impersonate impls ========
-impl HttpContextProvider for Impersonate {
-    fn context(self) -> HttpContext {
-        ImpersonateOption::builder()
-            .impersonate(self)
+/// ======== Emulation impls ========
+impl EmulationProviderFactory for Emulation {
+    fn emulation(self) -> EmulationProvider {
+        EmulationOption::builder()
+            .emulation(self)
             .build()
-            .context()
+            .emulation()
     }
 }
 
 /// Represents different operating systems for impersonation.
 ///
-/// The `ImpersonateOS` enum provides variants for different operating systems that can be used
-/// to impersonate HTTP requests. Each variant corresponds to a specific operating system.
+/// The `EmulationOS` enum provides variants for different operating systems that can be used
+/// to emulation HTTP requests. Each variant corresponds to a specific operating system.
 ///
 /// # Naming Convention
 ///
@@ -221,17 +223,17 @@ impl HttpContextProvider for Impersonate {
 /// # Examples
 ///
 /// ```rust
-/// use rquest::ImpersonateOS;
+/// use rquest::EmulationOS;
 ///
-/// let impersonate_os = ImpersonateOS::Windows;
-/// let serialized = serde_json::to_string(&impersonate_os).unwrap();
+/// let emulation_os = EmulationOS::Windows;
+/// let serialized = serde_json::to_string(&emulation_os).unwrap();
 /// assert_eq!(serialized, "\"windows\"");
 ///
-/// let deserialized: ImpersonateOS = serde_json::from_str(&serialized).unwrap();
-/// assert_eq!(deserialized, ImpersonateOS::Windows);
+/// let deserialized: EmulationOS = serde_json::from_str(&serialized).unwrap();
+/// assert_eq!(deserialized, EmulationOS::Windows);
 /// ```
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize, Serialize)]
-pub enum ImpersonateOS {
+pub enum EmulationOS {
     #[serde(rename = "windows")]
     Windows,
     #[serde(rename = "macos")]
@@ -245,34 +247,34 @@ pub enum ImpersonateOS {
     IOS,
 }
 
-/// ======== ImpersonateOS impls ========
-impl ImpersonateOS {
+/// ======== EmulationOS impls ========
+impl EmulationOS {
     #[inline]
     fn platform(&self) -> &'static str {
         match self {
-            ImpersonateOS::MacOS => "\"macOS\"",
-            ImpersonateOS::Linux => "\"Linux\"",
-            ImpersonateOS::Windows => "\"Windows\"",
-            ImpersonateOS::Android => "\"Android\"",
-            ImpersonateOS::IOS => "\"iOS\"",
+            EmulationOS::MacOS => "\"macOS\"",
+            EmulationOS::Linux => "\"Linux\"",
+            EmulationOS::Windows => "\"Windows\"",
+            EmulationOS::Android => "\"Android\"",
+            EmulationOS::IOS => "\"iOS\"",
         }
     }
 
     #[inline]
     fn is_mobile(&self) -> bool {
-        matches!(self, ImpersonateOS::Android | ImpersonateOS::IOS)
+        matches!(self, EmulationOS::Android | EmulationOS::IOS)
     }
 }
 
 #[derive(Default, TypedBuilder)]
-pub struct ImpersonateOption {
-    /// The browser version to impersonate.
+pub struct EmulationOption {
+    /// The browser version to emulation.
     #[builder(default)]
-    impersonate: Impersonate,
+    emulation: Emulation,
 
     /// The operating system.
     #[builder(default)]
-    impersonate_os: ImpersonateOS,
+    emulation_os: EmulationOS,
 
     /// Whether to skip HTTP/2.
     #[builder(default = false)]
@@ -283,72 +285,76 @@ pub struct ImpersonateOption {
     skip_headers: bool,
 }
 
-/// ======== ImpersonateOption impls ========
-impl HttpContextProvider for ImpersonateOption {
-    fn context(self) -> HttpContext {
-        impersonate_match!(
-            self.impersonate,
+/// ======== EmulationOption impls ========
+impl EmulationProviderFactory for EmulationOption {
+    fn emulation(self) -> EmulationProvider {
+        emulation_match!(
+            self.emulation,
             self,
 
-            Impersonate::Chrome100 => v100::http_context,
-            Impersonate::Chrome101 => v101::http_context,
-            Impersonate::Chrome104 => v104::http_context,
-            Impersonate::Chrome105 => v105::http_context,
-            Impersonate::Chrome106 => v106::http_context,
-            Impersonate::Chrome107 => v107::http_context,
-            Impersonate::Chrome108 => v108::http_context,
-            Impersonate::Chrome109 => v109::http_context,
-            Impersonate::Chrome114 => v114::http_context,
-            Impersonate::Chrome116 => v116::http_context,
-            Impersonate::Chrome117 => v117::http_context,
-            Impersonate::Chrome118 => v118::http_context,
-            Impersonate::Chrome119 => v119::http_context,
-            Impersonate::Chrome120 => v120::http_context,
-            Impersonate::Chrome123 => v123::http_context,
-            Impersonate::Chrome124 => v124::http_context,
-            Impersonate::Chrome126 => v126::http_context,
-            Impersonate::Chrome127 => v127::http_context,
-            Impersonate::Chrome128 => v128::http_context,
-            Impersonate::Chrome129 => v129::http_context,
-            Impersonate::Chrome130 => v130::http_context,
-            Impersonate::Chrome131 => v131::http_context,
-            Impersonate::Chrome132 => v132::http_context,
-            Impersonate::Chrome133 => v133::http_context,
+            Emulation::Chrome100 => v100::emulation,
+            Emulation::Chrome101 => v101::emulation,
+            Emulation::Chrome104 => v104::emulation,
+            Emulation::Chrome105 => v105::emulation,
+            Emulation::Chrome106 => v106::emulation,
+            Emulation::Chrome107 => v107::emulation,
+            Emulation::Chrome108 => v108::emulation,
+            Emulation::Chrome109 => v109::emulation,
+            Emulation::Chrome114 => v114::emulation,
+            Emulation::Chrome116 => v116::emulation,
+            Emulation::Chrome117 => v117::emulation,
+            Emulation::Chrome118 => v118::emulation,
+            Emulation::Chrome119 => v119::emulation,
+            Emulation::Chrome120 => v120::emulation,
+            Emulation::Chrome123 => v123::emulation,
+            Emulation::Chrome124 => v124::emulation,
+            Emulation::Chrome126 => v126::emulation,
+            Emulation::Chrome127 => v127::emulation,
+            Emulation::Chrome128 => v128::emulation,
+            Emulation::Chrome129 => v129::emulation,
+            Emulation::Chrome130 => v130::emulation,
+            Emulation::Chrome131 => v131::emulation,
+            Emulation::Chrome132 => v132::emulation,
+            Emulation::Chrome133 => v133::emulation,
 
-            Impersonate::SafariIos17_2 => safari_ios_17_2::http_context,
-            Impersonate::SafariIos17_4_1 => safari_ios_17_4_1::http_context,
-            Impersonate::SafariIos16_5 => safari_ios_16_5::http_context,
-            Impersonate::Safari15_3 => safari15_3::http_context,
-            Impersonate::Safari15_5 => safari15_5::http_context,
-            Impersonate::Safari15_6_1 => safari15_6_1::http_context,
-            Impersonate::Safari16 => safari16::http_context,
-            Impersonate::Safari16_5 => safari16_5::http_context,
-            Impersonate::Safari17_0 => safari17_0::http_context,
-            Impersonate::Safari17_2_1 => safari17_2_1::http_context,
-            Impersonate::Safari17_4_1 => safari17_4_1::http_context,
-            Impersonate::Safari17_5 => safari17_5::http_context,
-            Impersonate::Safari18 => safari18::http_context,
-            Impersonate::SafariIPad18 => safari_ipad_18::http_context,
-            Impersonate::Safari18_2 => safari18_2::http_context,
-            Impersonate::SafariIos18_1_1 => safari_ios_18_1_1::http_context,
+            Emulation::SafariIos17_2 => safari_ios_17_2::emulation,
+            Emulation::SafariIos17_4_1 => safari_ios_17_4_1::emulation,
+            Emulation::SafariIos16_5 => safari_ios_16_5::emulation,
+            Emulation::Safari15_3 => safari15_3::emulation,
+            Emulation::Safari15_5 => safari15_5::emulation,
+            Emulation::Safari15_6_1 => safari15_6_1::emulation,
+            Emulation::Safari16 => safari16::emulation,
+            Emulation::Safari16_5 => safari16_5::emulation,
+            Emulation::Safari17_0 => safari17_0::emulation,
+            Emulation::Safari17_2_1 => safari17_2_1::emulation,
+            Emulation::Safari17_4_1 => safari17_4_1::emulation,
+            Emulation::Safari17_5 => safari17_5::emulation,
+            Emulation::Safari18 => safari18::emulation,
+            Emulation::SafariIPad18 => safari_ipad_18::emulation,
+            Emulation::Safari18_2 => safari18_2::emulation,
+            Emulation::SafariIos18_1_1 => safari_ios_18_1_1::emulation,
 
-            Impersonate::OkHttp3_9 => okhttp3_9::http_context,
-            Impersonate::OkHttp3_11 => okhttp3_11::http_context,
-            Impersonate::OkHttp3_13 => okhttp3_13::http_context,
-            Impersonate::OkHttp3_14 => okhttp3_14::http_context,
-            Impersonate::OkHttp4_9 => okhttp4_9::http_context,
-            Impersonate::OkHttp4_10 => okhttp4_10::http_context,
-            Impersonate::OkHttp5 => okhttp5::http_context,
+            Emulation::OkHttp3_9 => okhttp3_9::emulation,
+            Emulation::OkHttp3_11 => okhttp3_11::emulation,
+            Emulation::OkHttp3_13 => okhttp3_13::emulation,
+            Emulation::OkHttp3_14 => okhttp3_14::emulation,
+            Emulation::OkHttp4_9 => okhttp4_9::emulation,
+            Emulation::OkHttp4_10 => okhttp4_10::emulation,
+            Emulation::OkHttp5 => okhttp5::emulation,
 
-            Impersonate::Edge101 => edge101::http_context,
-            Impersonate::Edge122 => edge122::http_context,
-            Impersonate::Edge127 => edge127::http_context,
-            Impersonate::Edge131 => edge131::http_context,
+            Emulation::Edge101 => edge101::emulation,
+            Emulation::Edge122 => edge122::emulation,
+            Emulation::Edge127 => edge127::emulation,
+            Emulation::Edge131 => edge131::emulation,
 
-            Impersonate::Firefox109 => ff109::http_context,
-            Impersonate::Firefox117 => ff117::http_context,
-            Impersonate::Firefox128 => ff128::http_context,
-            Impersonate::Firefox133 => ff133::http_context
+            Emulation::Firefox109 => ff109::emulation,
+            Emulation::Firefox117 => ff117::emulation,
+            Emulation::Firefox128 => ff128::emulation,
+            Emulation::Firefox133 => ff133::emulation,
+            Emulation::Firefox135 => ff135::emulation,
+            Emulation::FirefoxPrivate135 => ff_private_135::emulation,
+            Emulation::FirefoxAndroid135 => ff_android_135::emulation
         )
     }
 }
+

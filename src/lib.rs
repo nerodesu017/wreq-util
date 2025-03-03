@@ -1,5 +1,5 @@
-#[cfg(feature = "impersonate")]
-mod imp;
+#[cfg(feature = "emulation")]
+mod emulation;
 
-#[cfg(feature = "impersonate")]
-pub use self::imp::{Impersonate, ImpersonateOS, ImpersonateOption};
+#[cfg(feature = "emulation")]
+pub use self::emulation::{Emulation, EmulationOS, EmulationOption};
