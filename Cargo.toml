@@ -4,7 +4,7 @@ description = "Common utilities for rquest"
 repository = "https://github.com/0x676e67/rquest-util"
 documentation = "https://docs.rs/rquest-util"
 authors = ["0x676e67 <gngppz@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0-rc1"
 readme = "README.md"
 license = "GPL-3.0"
 edition = "2021"
@@ -22,7 +22,7 @@ zstd = ["rquest/zstd"]
 http = { version = "1", optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 typed-builder = { version = "0.20.0", optional = true }
-rquest = { git = "https://github.com/0x676e67/rquest", default-features = false }
+rquest = { version = "3.0.1-rc1", default-features = false }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
