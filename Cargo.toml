@@ -5,11 +5,16 @@ repository = "https://github.com/0x676e67/rquest-util"
 documentation = "https://docs.rs/rquest-util"
 keywords = ["http", "client", "emulation", "ja3", "ja4"]
 authors = ["0x676e67 <gngppz@gmail.com>"]
-version = "0.2.1"
+version = "0.2.2"
 readme = "README.md"
 license = "GPL-3.0"
 edition = "2024"
 rust-version = "1.85"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+targets = ["x86_64-unknown-linux-gnu"]
 
 [features]
 default = ["emulation", "gzip", "brotli", "deflate", "zstd"]
