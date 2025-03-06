@@ -6,7 +6,7 @@ use std::num::Wrapping;
 use strum::VariantArray;
 
 // from: https://github.com/seanmonstar/reqwest/blob/44ac897f1ab35ba24a195927043d185d5cbb6912/src/util.rs#L27
-pub(crate) fn fast_random() -> u64 {
+fn fast_random() -> u64 {
     thread_local! {
         static RNG: Cell<Wrapping<u64>> = Cell::new(Wrapping(seed()));
     }
