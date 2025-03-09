@@ -3,48 +3,29 @@ use super::*;
 use http2::*;
 use tls::*;
 
-macro_rules! mod_generator {
-    ($mod_name:ident, $cipher_list:expr, $ua:expr) => {
-        pub(crate) mod $mod_name {
-            use super::*;
-
-            #[inline(always)]
-            pub fn emulation(option: EmulationOption) -> EmulationProvider {
-                let default_headers = if !option.skip_headers {
-                    Some(super::header_initializer($ua))
-                } else {
-                    None
-                };
-
-                EmulationProvider::builder()
-                    .tls_config(tls_config!($cipher_list))
-                    .http2_config(conditional_http2!(option.skip_http2, http2_config!()))
-                    .default_headers(default_headers)
-                    .build()
-            }
-        }
-    };
-}
-
-macro_rules! tls_config {
-    ($cipher_list:expr) => {
-        OkHttpTlsConfig::builder().cipher_list($cipher_list).build()
-    };
-}
-
-macro_rules! http2_config {
-    () => {
-        Http2Config::builder()
-            .initial_stream_window_size(6291456)
-            .initial_connection_window_size(15728640)
-            .max_concurrent_streams(1000)
-            .max_header_list_size(262144)
-            .header_table_size(65536)
-            .headers_priority(HEADER_PRIORITY)
-            .headers_pseudo_order(HEADERS_PSEUDO_ORDER)
-            .settings_order(SETTINGS_ORDER)
-            .build()
-    };
+#[inline]
+pub fn build_emulation(
+    option: EmulationOption,
+    cipher_list: &'static str,
+    default_headers: Option<HeaderMap>,
+) -> EmulationProvider {
+    EmulationProvider::builder()
+        .tls_config(OkHttpTlsConfig::builder().cipher_list(cipher_list).build())
+        .http2_config(conditional_http2!(
+            option.skip_http2,
+            Http2Config::builder()
+                .initial_stream_window_size(6291456)
+                .initial_connection_window_size(15728640)
+                .max_concurrent_streams(1000)
+                .max_header_list_size(262144)
+                .header_table_size(65536)
+                .headers_priority(HEADER_PRIORITY)
+                .headers_pseudo_order(HEADERS_PSEUDO_ORDER)
+                .settings_order(SETTINGS_ORDER)
+                .build()
+        ))
+        .default_headers(default_headers)
+        .build()
 }
 
 #[inline]
@@ -143,6 +124,48 @@ mod http2 {
     ];
 }
 
+macro_rules! mod_generator {
+    ($mod_name:ident, $cipher_list:expr, $ua:expr) => {
+        pub(crate) mod $mod_name {
+            use super::*;
+
+            #[inline(always)]
+            pub fn emulation(option: EmulationOption) -> EmulationProvider {
+                let default_headers = if !option.skip_headers {
+                    Some(header_initializer($ua))
+                } else {
+                    None
+                };
+
+                build_emulation(option, $cipher_list, default_headers)
+            }
+        }
+    };
+}
+
+mod_generator!(
+    okhttp3_9,
+    join!(
+        ":",
+        "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+        "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+        "TLS_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_RSA_WITH_AES_128_CBC_SHA",
+        "TLS_RSA_WITH_AES_256_CBC_SHA",
+        "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
+    ),
+    "MaiMemo/4.4.50_639 okhttp/3.9 Android/5.0 Channel/WanDouJia Device/alps+M8+Emulator (armeabi-v7a) Screen/4.44 Resolution/480x800 DId/aa6cde19def3806806d5374c4e5fd617 RAM/0.94 ROM/4.91 Theme/Day"
+);
+
 mod_generator!(
     okhttp3_11,
     join!(
@@ -197,29 +220,6 @@ mod_generator!(
 );
 
 mod_generator!(
-    okhttp3_9,
-    join!(
-        ":",
-        "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
-        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
-        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
-        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
-        "TLS_RSA_WITH_AES_128_GCM_SHA256",
-        "TLS_RSA_WITH_AES_256_GCM_SHA384",
-        "TLS_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_RSA_WITH_AES_256_CBC_SHA",
-        "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
-    ),
-    "MaiMemo/4.4.50_639 okhttp/3.9 Android/5.0 Channel/WanDouJia Device/alps+M8+Emulator (armeabi-v7a) Screen/4.44 Resolution/480x800 DId/aa6cde19def3806806d5374c4e5fd617 RAM/0.94 ROM/4.91 Theme/Day"
-);
-
-mod_generator!(
     okhttp4_10,
     CIPHER_LIST,
     "GM-Android/6.112.2 (240590300; M:samsung SM-G781U1; O:33; D:edb34792871638d8) ObsoleteUrlFactory/1.0 OkHttp/4.10.0"
@@ -248,29 +248,7 @@ mod_generator!(
     "GM-Android/6.111.1 (240460200; M:motorola moto g power (2021); O:30; D:76ba9f6628d198c8) ObsoleteUrlFactory/1.0 OkHttp/4.9"
 );
 
-mod_generator!(
-    okhttp4_12,
-    join!(
-        ":",
-        "TLS_AES_128_GCM_SHA256",
-        "TLS_AES_256_GCM_SHA384",
-        "TLS_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
-        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
-        "TLS_RSA_WITH_AES_128_GCM_SHA256",
-        "TLS_RSA_WITH_AES_256_GCM_SHA384",
-        "TLS_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_RSA_WITH_AES_256_CBC_SHA",
-        "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
-    ),
-    "okhttp/4.12.0"
-);
+mod_generator!(okhttp4_12, CIPHER_LIST, "okhttp/4.12.0");
 
 mod_generator!(
     okhttp5,
