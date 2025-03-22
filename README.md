@@ -10,6 +10,10 @@ A collection of utilities to do common things with [rquest](https://github.com/0
 
 ## Emulation
 
+- **HTTP/2 over TLS**
+
+  **JA3**/**JA4**/**Akamai** fingerprints cannot accurately simulate browser fingerprints due to the sophistication of TLS encryption and the popularity of HTTP/2. rquest-util does not plan to support parsing these fingerprint strings for simulation. Users are encouraged to customize the configuration according to their own needs.
+
 - **Emulation Device**
 
   Most browser device models share the same TLS and HTTP/2 configuration, differing only in the User-Agent.
