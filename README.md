@@ -2,7 +2,8 @@
 
 [![CI](https://github.com/0x676e67/rquest-util/actions/workflows/ci.yml/badge.svg)](https://github.com/0x676e67/rquest-util/actions/workflows/ci.yml)
 [![MIT licensed](https://img.shields.io/badge/license-GPL3.0-blue.svg)](./LICENSE)
-[![crates.io](https://img.shields.io/crates/v/rquest-util.svg)](https://crates.io/crates/rquest-util)
+[![crates.io](https://img.shields.io/crates/v/rquest-util.svg?logo=rust)](https://crates.io/crates/rquest-util)
+[![docs.rs](https://img.shields.io/docsrs/rquest-util?logo=rust)](https://docs.rs/rquest-util)
 ![Crates.io Total Downloads](https://img.shields.io/crates/d/rquest-util)
 
 A collection of utilities to do common things with [rquest](https://github.com/0x676e67/rquest).
@@ -11,7 +12,7 @@ A collection of utilities to do common things with [rquest](https://github.com/0
 
 - **Emulation Device**
 
-  In fact, most device models have the same `TLS`/`HTTP2` configuration, except that the `User-Agent` is changed.
+  Most browser device models share the same TLS and HTTP/2 configuration, differing only in the User-Agent.
 
     <details>
 
@@ -30,10 +31,6 @@ A collection of utilities to do common things with [rquest](https://github.com/0
 ## Contributing
 
 If you would like to submit your contribution, please open a [Pull Request](https://github.com/0x676e67/rquest-util/pulls).
-
-## Getting help
-
-Your question might already be answered on the [issues](https://github.com/0x676e67/rquest-util/issues)
 
 ## License
 
