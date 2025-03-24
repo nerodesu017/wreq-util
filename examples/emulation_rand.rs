@@ -3,7 +3,7 @@ use rquest_util::Emulation;
 
 #[tokio::main]
 async fn main() -> Result<(), rquest::Error> {
-    // Build a client to emulation Firefox135
+    // Build a client to emulation random devices
     let client = Client::builder()
         .emulation(Emulation::random())
         .cert_verification(false)
