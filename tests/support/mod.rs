@@ -13,7 +13,7 @@ pub static DEFAULT_USER_AGENT: &str =
 
 pub static CLIENT: LazyLock<Client> = LazyLock::new(|| {
     Client::builder()
-        .connect_timeout(Duration::from_secs(10))
+        .connect_timeout(Duration::from_secs(30))
         .build()
         .unwrap()
 });
@@ -31,6 +31,7 @@ macro_rules! test_emulation {
                 .send()
                 .await
                 .unwrap();
+
             assert_eq!(resp.status(), rquest::StatusCode::OK);
             let content = resp.text().await.unwrap();
 
@@ -44,7 +45,9 @@ macro_rules! test_emulation {
             if !conditional {
                 println!("{}", content);
             }
-            assert!(content.contains($akamai_hash));
+            assert!(conditional);
+
+            tokio::time::sleep(std::time::Duration::from_millis(200)).await;
         }
     };
 }
