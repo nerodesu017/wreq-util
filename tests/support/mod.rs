@@ -3,7 +3,7 @@ pub mod delay_layer;
 pub mod delay_server;
 pub mod server;
 
-use rquest::Client;
+use wreq::Client;
 use std::{sync::LazyLock, time::Duration};
 
 // TODO: remove once done converting to new support server?
@@ -32,7 +32,7 @@ macro_rules! test_emulation {
                 .await
                 .unwrap();
 
-            assert_eq!(resp.status(), rquest::StatusCode::OK);
+            assert_eq!(resp.status(), wreq::StatusCode::OK);
             let content = resp.text().await.unwrap();
 
             let conditional = $ja4.iter().any(|&ja4| content.contains(ja4));

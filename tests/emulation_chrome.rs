@@ -1,7 +1,7 @@
 #[macro_use]
 mod support;
 
-use rquest_util::Emulation;
+use wreq_util::Emulation;
 use support::CLIENT;
 
 // Enabling certain extensions will change the length during encryption. This is because TLS will automatically use padding to fill the data and add a padding extension. At this time, the ja4 fingerprint will change.

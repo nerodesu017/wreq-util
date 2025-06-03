@@ -12,16 +12,16 @@ pub mod safari;
 mod emulation_imports {
     pub use crate::emulation::{EmulationOS, EmulationOption};
     #[cfg(all(feature = "gzip", feature = "deflate", feature = "brotli"))]
-    pub use rquest::header::ACCEPT_ENCODING;
-    pub use rquest::header::{
+    pub use wreq::header::ACCEPT_ENCODING;
+    pub use wreq::header::{
         ACCEPT, ACCEPT_LANGUAGE, HeaderMap, HeaderName, HeaderValue, UPGRADE_INSECURE_REQUESTS,
         USER_AGENT,
     };
-    pub use rquest::{EmulationProvider, Http2Config};
+    pub use wreq::{EmulationProvider, Http2Config};
 }
 
 mod tls_imports {
-    pub use rquest::{
+    pub use wreq::{
         AlpnProtos, AlpsProtos, CertCompressionAlgorithm, ExtensionType, SslCurve, TlsConfig,
         TlsVersion,
     };
@@ -29,8 +29,8 @@ mod tls_imports {
 }
 
 mod http2_imports {
-    pub use rquest::PseudoOrder::{self, *};
-    pub use rquest::SettingsOrder::{self, *};
-    pub use rquest::{Priority, StreamDependency, StreamId};
+    pub use wreq::PseudoOrder::{self, *};
+    pub use wreq::SettingsOrder::{self, *};
+    pub use wreq::{Priority, StreamDependency, StreamId};
     pub use std::sync::LazyLock;
 }

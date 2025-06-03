@@ -1,8 +1,8 @@
-use rquest::Client;
-use rquest_util::Emulation;
+use wreq::Client;
+use wreq_util::Emulation;
 
 #[tokio::main]
-async fn main() -> Result<(), rquest::Error> {
+async fn main() -> Result<(), wreq::Error> {
     // Build a client to emulation Firefox136
     let client = Client::builder()
         .emulation(Emulation::Firefox136)

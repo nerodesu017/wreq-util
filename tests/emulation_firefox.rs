@@ -1,7 +1,7 @@
 #[macro_use]
 mod support;
 
-use rquest_util::Emulation;
+use wreq_util::Emulation;
 use support::CLIENT;
 
 test_emulation!(

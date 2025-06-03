@@ -1,18 +1,16 @@
-# rquest-util
+# wreq-util
 
-[![CI](https://github.com/0x676e67/rquest-util/actions/workflows/ci.yml/badge.svg)](https://github.com/0x676e67/rquest-util/actions/workflows/ci.yml)
+[![CI](https://github.com/0x676e67/wreq-util/actions/workflows/ci.yml/badge.svg)](https://github.com/0x676e67/wreq-util/actions/workflows/ci.yml)
 [![MIT licensed](https://img.shields.io/badge/license-GPL3.0-blue.svg)](./LICENSE)
-[![crates.io](https://img.shields.io/crates/v/rquest-util.svg?logo=rust)](https://crates.io/crates/rquest-util)
-[![docs.rs](https://img.shields.io/docsrs/rquest-util?logo=rust)](https://docs.rs/rquest-util)
-![Crates.io Total Downloads](https://img.shields.io/crates/d/rquest-util)
+[![crates.io](https://img.shields.io/crates/v/wreq-util.svg?logo=rust)](https://crates.io/crates/wreq-util)
+[![docs.rs](https://img.shields.io/docsrs/wreq-util?logo=rust)](https://docs.rs/wreq-util)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/wreq-util)
 
-A collection of utilities to do common things with [rquest](https://github.com/0x676e67/rquest).
+A collection of utilities to do common things with [wreq](https://github.com/0x676e67/wreq).
 
 ## Emulation
 
 - **HTTP/2 over TLS**
-
-  **JA3**/**JA4**/**Akamai** fingerprints cannot accurately simulate browser fingerprints due to the sophistication of TLS encryption and the popularity of HTTP/2. rquest-util does not plan to support parsing these fingerprint strings for simulation. Users are encouraged to customize the configuration according to their own needs.
 
 - **Emulation Device**
 
@@ -34,8 +32,8 @@ A collection of utilities to do common things with [rquest](https://github.com/0
 
 ## Contributing
 
-If you would like to submit your contribution, please open a [Pull Request](https://github.com/0x676e67/rquest-util/pulls).
+If you would like to submit your contribution, please open a [Pull Request](https://github.com/0x676e67/wreq-util/pulls).
 
 ## License
 
-**rquest-util** © [0x676e67](https://github.com/0x676e67), Released under the [GPL-3.0](https://github.com/0x676e67/rquest-util/blob/main/LICENSE) License.
+**wreq-util** © [0x676e67](https://github.com/0x676e67), Released under the [GPL-3.0](https://github.com/0x676e67/wreq-util/blob/main/LICENSE) License.

@@ -3,7 +3,7 @@ mod device;
 mod rand;
 
 use device::{chrome::*, firefox::*, okhttp::*, safari::*};
-use rquest::{EmulationProvider, EmulationProviderFactory};
+use wreq::{EmulationProvider, EmulationProviderFactory};
 #[cfg(feature = "emulation-serde")]
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "emulation-rand")]
@@ -50,7 +50,7 @@ define_emulation_enum!(
     /// # Examples
     ///
     /// ```rust
-    /// use rquest_util::Emulation;
+    /// use wreq_util::Emulation;
     ///
     /// let emulation = Emulation::Chrome100;
     /// let serialized = serde_json::to_string(&emulation).unwrap();
@@ -158,7 +158,7 @@ define_emulation_enum!(
     /// # Examples
     ///
     /// ```rust
-    /// use rquest::EmulationOS;
+    /// use wreq::EmulationOS;
     ///
     /// let emulation_os = EmulationOS::Windows;
     /// let serialized = serde_json::to_string(&emulation_os).unwrap();
@@ -213,7 +213,7 @@ impl EmulationOS {
 /// # Examples
 ///
 /// ```rust
-/// use rquest_util::{Emulation, EmulationOS, EmulationOption};
+/// use wreq_util::{Emulation, EmulationOS, EmulationOption};
 ///
 /// let emulation_option = EmulationOption::builder()
 ///     .emulation(Emulation::Chrome134)

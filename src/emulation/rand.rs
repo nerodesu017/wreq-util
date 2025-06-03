@@ -48,7 +48,7 @@ impl Emulation {
     /// # Examples
     ///
     /// ```
-    /// use rquest_util::Emulation;
+    /// use wreq_util::Emulation;
     ///
     /// let random_emulation = Emulation::random();
     /// println!("{:?}", random_emulation);

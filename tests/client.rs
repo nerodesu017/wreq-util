@@ -1,8 +1,8 @@
 #![cfg(not(target_arch = "wasm32"))]
 mod support;
 
-use rquest::Client;
-use rquest_util::{Emulation, EmulationOS, EmulationOption};
+use wreq::Client;
+use wreq_util::{Emulation, EmulationOS, EmulationOption};
 use support::server;
 
 #[tokio::test]
@@ -47,5 +47,5 @@ async fn test_client_emulation_device() {
         .await
         .expect("request");
 
-    assert_eq!(res.status(), rquest::StatusCode::OK);
+    assert_eq!(res.status(), wreq::StatusCode::OK);
 }
