@@ -3,8 +3,8 @@ pub mod delay_layer;
 pub mod delay_server;
 pub mod server;
 
-use wreq::Client;
 use std::{sync::LazyLock, time::Duration};
+use wreq::Client;
 
 // TODO: remove once done converting to new support server?
 #[allow(unused)]

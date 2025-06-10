@@ -21,16 +21,16 @@ mod emulation_imports {
 }
 
 mod tls_imports {
+    pub use typed_builder::TypedBuilder;
     pub use wreq::{
         AlpnProtos, AlpsProtos, CertCompressionAlgorithm, ExtensionType, SslCurve, TlsConfig,
         TlsVersion,
     };
-    pub use typed_builder::TypedBuilder;
 }
 
 mod http2_imports {
+    pub use std::sync::LazyLock;
     pub use wreq::PseudoOrder::{self, *};
     pub use wreq::SettingsOrder::{self, *};
     pub use wreq::{Priority, StreamDependency, StreamId};
-    pub use std::sync::LazyLock;
 }

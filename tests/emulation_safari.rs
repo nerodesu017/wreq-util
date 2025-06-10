@@ -1,8 +1,8 @@
 #[macro_use]
 mod support;
 
-use wreq_util::Emulation;
 use support::CLIENT;
+use wreq_util::Emulation;
 
 test_emulation!(
     test_safari_15_3,

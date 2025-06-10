@@ -1,9 +1,9 @@
 #![cfg(not(target_arch = "wasm32"))]
 mod support;
 
+use support::server;
 use wreq::Client;
 use wreq_util::{Emulation, EmulationOS, EmulationOption};
-use support::server;
 
 #[tokio::test]
 async fn test_client_emulation_device() {

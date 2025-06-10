@@ -3,12 +3,12 @@ mod device;
 mod rand;
 
 use device::{chrome::*, firefox::*, okhttp::*, safari::*};
-use wreq::{EmulationProvider, EmulationProviderFactory};
 #[cfg(feature = "emulation-serde")]
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "emulation-rand")]
 use strum_macros::VariantArray;
 use typed_builder::TypedBuilder;
+use wreq::{EmulationProvider, EmulationProviderFactory};
 
 macro_rules! define_emulation_enum {
     ($(#[$meta:meta])* $name:ident, $default_variant:ident, $($variant:ident => $rename:expr),*) => {
