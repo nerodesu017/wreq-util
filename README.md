@@ -29,10 +29,6 @@ A collection of utilities to do common things with [wreq](https://github.com/0x6
 
     </details>
 
-## Contributing
-
-If you would like to submit your contribution, please open a [Pull Request](https://github.com/0x676e67/wreq-util/pulls).
-
 ## License
 
 **wreq-util** © [0x676e67](https://github.com/0x676e67), Released under the [GPL-3.0](https://github.com/0x676e67/wreq-util/blob/main/LICENSE) License.
