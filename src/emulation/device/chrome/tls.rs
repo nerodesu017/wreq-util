@@ -81,6 +81,7 @@ impl From<ChromeTlsConfig> for TlsOptions {
             .enable_ech_grease(val.enable_ech_grease)
             .alps_protocols([val.alps_protos])
             .alps_use_new_codepoint(val.alps_use_new_codepoint)
+            .aes_hw_override(true)
             .certificate_compression_algorithms(CERT_COMPRESSION_ALGORITHM)
             .build()
     }
