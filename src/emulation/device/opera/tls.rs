@@ -1,4 +1,4 @@
-use super::tls_imports::*;
+use super::*;
 
 macro_rules! tls_options {
     ($curves:expr) => {
@@ -12,7 +12,7 @@ macro_rules! tls_options {
     };
 }
 
-pub const CURVES: &'static str = join!(":", "X25519MLKEM768", "X25519", "P-256", "P-384");
+pub const CURVES: &str = join!(":", "X25519MLKEM768", "X25519", "P-256", "P-384");
 
 pub const CIPHER_LIST: &str = join!(
     ":",
