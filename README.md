@@ -14,7 +14,7 @@ A collection of utilities to do common things with [wreq](https://github.com/0x6
 
   Most browser device models share the same TLS and HTTP/2 configuration, differing only in the User-Agent.
 
-  | Browser | Versions |
+  | Device | Versions |
   |---------|----------|
   | <span style="display:inline-flex; align-items:center;"><img src="https://raw.githubusercontent.com/alrra/browser-logos/main/src/chrome/chrome_32x32.png" width="16" height="16"> Chrome</span> | `Chrome100`, `Chrome101`, `Chrome104`, `Chrome105`, `Chrome106`, `Chrome107`, `Chrome108`, `Chrome109`, `Chrome110`, `Chrome114`, `Chrome116`, `Chrome117`, `Chrome118`, `Chrome119`, `Chrome120`, `Chrome123`, `Chrome124`, `Chrome126`, `Chrome127`, `Chrome128`, `Chrome129`, `Chrome130`, `Chrome131`, `Chrome132`, `Chrome133`, `Chrome134`, `Chrome135`, `Chrome136`, `Chrome137`, `Chrome138`, `Chrome139`, `Chrome140` |
   | <span style="display:inline-flex; align-items:center;"><img src="https://raw.githubusercontent.com/alrra/browser-logos/main/src/edge/edge_32x32.png" width="16" height="16"> Edge</span> | `Edge101`, `Edge122`, `Edge127`, `Edge131`, `Edge134` |
