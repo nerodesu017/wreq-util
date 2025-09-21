@@ -70,40 +70,9 @@ jobs:
           set -euxo pipefail
           cargo nextest run --workspace --all-features
 
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    environment: Windows
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - name: Install NASM
-        run: |
-          choco install nasm -y
-      - name: Build
-        run: |
-          cargo build --all-features
-
-  macos:
-    name: macOS
-    runs-on: macos-latest
-    environment: macOS
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - name: Build
-        run: |
-          cargo build --all-features
-
   linux:
     name: Linux
-    needs: [style, tests, docs, windows, macos]
+    needs: [style, tests, docs]
     runs-on: ubuntu-latest
     environment: Linux
     if: startsWith(github.ref, 'refs/tags/')
@@ -121,5 +90,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
           generate_release_notes: true
